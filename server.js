@@ -15,8 +15,9 @@ app.use(
     limit: "50mb",
   })
 );
-app.use(cors("*"));
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use(cors());
+
+app.use("/static", express.static(path.join(__dirname, "/uploads/")));
 
 if (process.env.NODE_ENV == "development") {
   app.use(logger("tiny"));
