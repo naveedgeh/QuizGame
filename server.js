@@ -17,7 +17,7 @@ app.use(
 );
 app.use(cors());
 
-app.use("/static", express.static(path.join(__dirname, "/uploads/")));
+app.use("/uploads", express.static(path.join(__dirname, "/uploads/")));
 
 if (process.env.NODE_ENV == "development") {
   app.use(logger("tiny"));
@@ -28,6 +28,6 @@ readdir("./Routes", (err, files) =>
 );
 const Port = process.env.PORT || 8080;
 app.listen(Port, () => {
-  console.log(`http://localhost${Port}`);
+  console.log(`http://${process.env.HOST_NAME}:${Port}`);
   require("./Database/database");
 });

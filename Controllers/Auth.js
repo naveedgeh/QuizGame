@@ -18,35 +18,29 @@ exports.singUp = async (req, res) => {
   });
   const user = await userObject.save();
   if (user) {
-    return res
-      .status(201)
-      .json({ message: "Successfully Registered", status: 201, data: user });
+    return res.send(data);
   }
 };
 exports.Login = async (req, res) => {
   const { username, password } = req.body;
   const user = await User.findOne({ email: username });
   if (!user) {
-    return res.status(401).json({ message: "Email not found" });
+    return res.send("Email not found");
   }
   const match = bcrypt.compare(password, user.password);
   if (!match) {
-    return res.status(401).json({ message: "Password is not correct" });
+    return res.send("Password is not correct");
   }
   if (user) {
     const privtateKey = process.env.PRIVATE_KEY;
     const token = jwt.sign({ id: user._id, email: user.email }, privtateKey);
     return res.status(200).json({
-      message: "Successfuly Login",
-      stutus: 200,
-      data: {
-        _id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        instaUserName: user.instaUserName,
-        profileImage: `http://${process.env.HOST_NAME}:${process.env.PORT}/uploads/userProfile/${user.profileImage}`,
-      },
+      _id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      instaUserName: user.instaUserName,
+      profileImage: `http://${process.env.HOST_NAME}:${process.env.PORT}/uploads/userProfile/${user.profileImage}`,
       token,
     });
   }
@@ -55,7 +49,7 @@ exports.profileUpdate = async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(id);
   if (!user) {
-    return res.status(400).json({ message: "user not found", status: 400 });
+    return res.send("user not found");
   }
   if (req.body.firstName) {
     user.firstName = req.body.firstName;
@@ -74,7 +68,5 @@ exports.profileUpdate = async (req, res) => {
   }
   const profile = await user.save();
   profile.profileImage = `http://${process.env.HOST_NAME}:${process.env.PORT}/uploads/userProfile/${user.profileImage}`;
-  return res
-    .status(200)
-    .json({ message: "Successfully updated", data: profile, status: 200 });
+  return res.send(data);
 };

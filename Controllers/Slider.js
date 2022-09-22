@@ -2,13 +2,13 @@ const Slider = require("../Models/Slider");
 exports.getSlider = async (req, res) => {
   const slider = await Slider.find({});
   if (slider.length == 0) {
-    return res.status(401).json({ status: 401, message: "Data is not found" });
+    return res.send("Data is not found");
   }
   slider.map(
     (s) =>
       (s.sliderImage = `http://${process.env.HOST_NAME}:${process.env.PORT}/uploads/slider/${s.sliderImage}`)
   );
-  return res.status(200).json({ status: 200, data: { slider } });
+  return res.send(slider);
 };
 exports.CreateSlider = async (req, res) => {
   const sliderObject = new Slider({
@@ -18,9 +18,7 @@ exports.CreateSlider = async (req, res) => {
   });
   const slider = await sliderObject.save();
   if (slider) {
-    return res
-      .status(201)
-      .json({ message: "Successfully Created", status: 201 });
+    return res.send("Successfully Created");
   }
 };
 exports.getSliderById = (req, res) => {};

@@ -15,16 +15,14 @@ exports.getDailyTask = async (req, res) => {
     .limit(pageSize)
     .sort({ createdAt: 1 });
   if (dailyTask.length == 0) {
-    return res.status(401).json({ status: 401, message: "Data is not found" });
+    return res.send("Data is not found");
   }
   dailyTask.map((d) => {
     d.image = `http://${process.env.HOST_NAME}:${process.env.PORT}/uploads/dailytask/${d.image}`;
     d.logo = `http://${process.env.HOST_NAME}:${process.env.PORT}/uploads/dailytask/logo/${d.logo}`;
     return d;
   });
-  return res
-    .status(200)
-    .json({ status: 200, data: { dailyTask }, total: dailyTask.length });
+  return res.send(data);
 };
 exports.CreateDailyTask = async (req, res) => {
   const dailyObject = new dailyTasks({
@@ -35,9 +33,7 @@ exports.CreateDailyTask = async (req, res) => {
   });
   const dailyTask = await dailyObject.save();
   if (dailyTask) {
-    return res
-      .status(201)
-      .json({ message: "Successfully Created", status: 201 });
+    return res.send("Successfully Created");
   }
 };
 exports.updateDailyTaskByUser = async (req, res) => {
@@ -48,11 +44,9 @@ exports.updateDailyTaskByUser = async (req, res) => {
     { $push: { user: user.id } }
   );
   if (!task) {
-    return res.status(400).json({ message: "Task is not found", status: 400 });
+    return res.send("Task is not found");
   }
-  return res
-    .status(200)
-    .json({ message: "successfully update task", data: task, status: 200 });
+  return res.send(task);
 };
 exports.DailyTaskClicked = () => {};
 exports.getDailyTaskById = (req, res) => {};
