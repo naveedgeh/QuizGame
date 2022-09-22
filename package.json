@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js",
-    "dev":"pm2 start server.js"
+    "dev":"pm2 start server.js",
+    "re-dev":"pm2 restart server.js"
   },
   "keywords": [],
   "author": "",
