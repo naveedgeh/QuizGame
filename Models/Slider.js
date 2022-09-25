@@ -5,6 +5,7 @@ const SliderSchema = new mongoose.Schema(
     slierCaption: { type: String },
     sliderImage: { type: String },
     sliderurl: { type: String },
+    slidertype: { type: String },
   },
   { timestamps: true }
 );

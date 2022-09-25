@@ -1,6 +1,7 @@
 const Slider = require("../Models/Slider");
 exports.getSlider = async (req, res) => {
-  const slider = await Slider.find({});
+  const { option } = req.query;
+  const slider = await Slider.find({ slidertype: option });
   if (slider.length == 0) {
     return res.send("Data is not found");
   }
@@ -15,6 +16,7 @@ exports.CreateSlider = async (req, res) => {
     slierCaption: req.body.slierCaption,
     sliderImage: req.file.originalname,
     sliderurl: req.body.sliderurl,
+    slidertype: req.body.slidertype,
   });
   const slider = await sliderObject.save();
   if (slider) {

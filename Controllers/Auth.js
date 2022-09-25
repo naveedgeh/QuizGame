@@ -1,10 +1,12 @@
 const User = require("../Models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-exports.Login = (req, res) => {
-  return res.send("login");
-};
+const { where } = require("../Models/dailytasks");
+
 exports.singUp = async (req, res) => {
+  const ur = await User.findOne({ email: req.body.email });
+  console.log(ur);
+  if (ur) return res.send("User already register");
   const saltRounds = 10;
   const salt = bcrypt.genSaltSync(saltRounds);
   const passwordhash = bcrypt.hashSync(req.body.password, salt);
@@ -15,10 +17,11 @@ exports.singUp = async (req, res) => {
     email: req.body.email,
     password: passwordhash,
     profileImage: req.file.originalname,
+    dzcoinPoint: req.body.dzcoinPoint || 0,
   });
   const user = await userObject.save();
   if (user) {
-    return res.send(data);
+    return res.send(user);
   }
 };
 exports.Login = async (req, res) => {
@@ -68,5 +71,15 @@ exports.profileUpdate = async (req, res) => {
   }
   const profile = await user.save();
   profile.profileImage = `http://${process.env.HOST_NAME}:${process.env.PORT}/uploads/userProfile/${user.profileImage}`;
-  return res.send(data);
+  return res.send(profile);
+};
+exports.getTopUser = async (req, res) => {
+  const { pagesize } = req.query;
+  const users = await User.find({}).sort({ dzcoinPoint: -1 }).limit(pagesize);
+
+  if (users.length == 0) {
+    return res.send("data not found");
+  }
+  users.profileImage = `http://${process.env.HOST_NAME}:${process.env.PORT}/uploads/userProfile/${users.profileImage}`;
+  return res.send(users);
 };

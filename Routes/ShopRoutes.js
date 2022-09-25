@@ -1,14 +1,9 @@
 const express = require("express");
-const {
-  Login,
-  singUp,
-  profileUpdate,
-  getTopUser,
-} = require("../Controllers/Auth");
+const { addShop, getShop } = require("../Controllers/Shop");
 const multer = require("multer");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads/UserProfile");
+    cb(null, "uploads/shop");
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
@@ -16,8 +11,8 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 const route = express.Router();
-route.post("/login", Login);
-route.post("/singup", upload.single("profileImage"), singUp);
-route.put("/profileudate/:id", upload.single("profileImage"), profileUpdate);
-route.get("/topuser", getTopUser);
+
+route.post("/addshop", upload.single("logo"), addShop);
+route.get("/shop", getShop);
+
 module.exports = route;

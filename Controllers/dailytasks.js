@@ -22,7 +22,7 @@ exports.getDailyTask = async (req, res) => {
     d.logo = `http://${process.env.HOST_NAME}:${process.env.PORT}/uploads/dailytask/logo/${d.logo}`;
     return d;
   });
-  return res.send(data);
+  return res.send(dailyTask);
 };
 exports.CreateDailyTask = async (req, res) => {
   const dailyObject = new dailyTasks({
